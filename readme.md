@@ -94,13 +94,13 @@ multimodal_ai/
 │   └── A1_vlm_stl10_scratch.ipynb
 │
 ├── A1_vae/                       # Appendix. Variational Autoencoders
-│   ├── 4_vae.ipynb/py
-│   └── 5_vae_scratch.ipynb/py
+│   ├── 1_vae.ipynb/py
+│   └── 2_vae_scratch.ipynb/py
 │
 ├── A2_sd/                        # Appendix. Stable Diffusion
-│   ├── 6_stable_diffusion_hf.ipynb/py
-│   ├── 7_stable_diffusion_scratch.ipynb/py
-│   └── 8_stable_diffusion_scratch_adv.ipynb/py
+│   ├── 1_stable_diffusion_hf.ipynb/py
+│   ├── 2_stable_diffusion_scratch.ipynb/py
+│   └── 3_stable_diffusion_scratch_adv.ipynb/py
 │
 ├── 7_next/                       # Advanced topics and resources
 └── readme.md                     # This file
