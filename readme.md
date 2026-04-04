@@ -6,7 +6,7 @@ This repository provides a comprehensive, hands-on tutorial for learning multimo
 
 The tutorial emphasizes both theoretical understanding and practical implementation by providing dual approaches: pre-trained model usage for rapid application development and from-scratch implementations for deep architectural understanding. Each module builds upon previous concepts, creating a coherent learning path from basic CNN and NLP techniques to advanced generative and multimodal systems.
 
-<img src='./5_clip/output.png' height="200" /> <img src='./6_vlm/output.png' height="200" />
+<img src='./5_clip/output.png' height="150" /> <img src='./6_vlm/output.png' height="150" />
 
 ### Key Learning Objectives
 
