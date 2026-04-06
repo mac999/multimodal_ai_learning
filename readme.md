@@ -1,4 +1,4 @@
-# Multimodal AI Technology Development Tutorial
+# Multimodal AI Technology Development Learning and Tutorial
 
 ## Overview
 
