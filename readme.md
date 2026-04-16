@@ -9,8 +9,8 @@ The tutorial emphasizes both theoretical understanding and practical implementat
 <p align="center">
 <img src='./90_doc/img6.png' width="600" /> </br> <img src='./90_doc/img7.png' width="600" /></br>
 <img src='./90_doc/img1.png' height="200" /> <img src='./90_doc/img2.png' height="200" /> </br>
-<img src='./90_doc/img4.png' height="200" /> <img src='./90_doc/img5.png' height="200" /></br>
-<img src='./90_doc/img3.png' height="150" /> <img src='./5_clip/output.png' height="150" /> <img src='./6_vlm/output.png' height="150" /></br>
+<img src='./90_doc/img3.png' height="200" /> <img src='./90_doc/img4.png' height="200" /></br>
+ <img src='./90_doc/img5.png' height="150" /> <img src='./5_clip/output.png' height="150" /> <img src='./6_vlm/output.png' height="150" /></br>
 </p>
 
 ### Key Learning Objectives
