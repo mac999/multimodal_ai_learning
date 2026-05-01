@@ -24,8 +24,8 @@ class MaskedDataset(Dataset):
             truncation=True,
             return_tensors="pt"
         )
-        input_ids = encoding["input_ids"].squeeze(0)
-        attention_mask = encoding["attention_mask"].squeeze(0)
+        input_ids = encoding["input_ids"].squeeze(0)            # ex) text="Hello world" → input_ids=[101, 7592, 2088, 102, 0, 0, ...] (padded to max_length)
+        padding_mask = encoding["attention_mask"].squeeze(0)    # ex) text="Hello world" → attention_mask=[1, 1, 1, 1, 0, 0, ...] (1 for real tokens, 0 for padding)
 
         # Create masked input and labels
         labels = input_ids.clone() # tokenize labels for loss calculation
@@ -36,7 +36,7 @@ class MaskedDataset(Dataset):
 
         return {
             "input_ids": input_ids, # Masked tokenized input text
-            "attention_mask": attention_mask,  # Attention mask for the input
+            "attention_mask": padding_mask,  # Attention mask for the input
             "labels": labels # Original tokenized input text (used as labels for loss calculation)
         }
 
@@ -59,6 +59,7 @@ optimizer = AdamW(model.parameters(), lr=5e-5)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 
+losses = []
 epochs = 500
 for epoch in range(epochs):
     model.train()
@@ -73,11 +74,19 @@ for epoch in range(epochs):
         outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
         loss = outputs.loss
         print(f"Epoch {epoch + 1} Loss: {loss.item():.4f}")
+        losses.append(loss.item())
 
         # Backward pass
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+
+import matplotlib.pyplot as plt
+plt.plot(losses)
+plt.xlabel("Iteration")
+plt.ylabel("Loss")
+plt.title("Training Loss Over Time")
+plt.show()
 
 # 학습된 모델 테스트
 #
@@ -109,11 +118,17 @@ with torch.no_grad():
 
 # 평가 결과 출력
 for i, test_text in enumerate(test_texts):
-    masked_index = (input_ids[i] == tokenizer.mask_token_id).nonzero(as_tuple=True)[0].item()
-    predicted_token_id = predictions[i, masked_index].argmax(dim=-1).item() # mask 된 토큰의 예측된 단어 사전 중 가장 높은 확률을 가진 토큰 ID 추출
-    predicted_token = tokenizer.decode([predicted_token_id])    # 예측된 토큰 ID를 실제 단어로 디코딩
+    mask_positions = input_ids[i] == tokenizer.mask_token_id    # [101, 200, 103, 300] → [False, False, True, False]
+    mask_indices = mask_positions.nonzero(as_tuple=True)        # (tensor([2]),)
+    mask_indices = mask_indices[0]      # tensor([2])
+    masked_index = mask_indices.item()  # 2
+
+    # mask 된 토큰의 예측된 단어 사전 중 가장 높은 확률을 가진 토큰 ID 추출
+    logits = predictions[i, masked_index]               # shape: [vocab_size]. vocab_size=30522 (BERT)
+    predicted_token_id_tensor = logits.argmax(dim=-1)   # ex) logits=[0.1, 0.2, 0.05, ..., 0.3] → predicted_token_id_tensor=7592
+    predicted_token_id = predicted_token_id_tensor.item()   # 7592
+    print(f"logits shape: {logits.shape}, logit: {logits[predicted_token_id]}, predicted_token_id: {predicted_token_id}")
+    predicted_token = tokenizer.decode([predicted_token_id])                # 예측된 토큰 ID를 실제 단어로 디코딩
 
     print(f"Original: {test_text}")
     print(f"Prediction: {test_text.replace(tokenizer.mask_token, predicted_token)}") # [MASK] 토큰을 예측된 단어로 대체하여 출력
-    print()
-

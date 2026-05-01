@@ -15,6 +15,8 @@ conversation_data = [
     {"question": "너 좋아하는 건 뭐야?", "answer": "나는 데이터를 분석하고 정보를 제공하는 걸 좋아해."},
 ]
 
+model_id = "Qwen/Qwen2.5-0.5B-Instruct"
+
 def gen_model(question_text): # 추론 함수
     messages = [{"role": "user", "content": question_text}]
     prompt = tokenizer.apply_chat_template(
@@ -103,7 +105,6 @@ class ConversationDataset(Dataset):
         }
 
 # Step 3: 토크나이저 및 데이터셋 준비
-model_id = "Qwen/Qwen2.5-0.5B-Instruct"
 tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=False)   
 if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
