@@ -43,8 +43,7 @@ print("\nTop predictions:\n")
 for value, index in zip(values, indices):
     print(f"{cifar100.classes[index]:>16s}: {100 * value.item():.2f}%")
 
-
-# 테스트 이미지로 CLIP 모델 활용 예제
+# 테스트 이미지(Zeroshot)로 CLIP 모델 예측 예제
 import torch
 import clip
 from PIL import Image
@@ -52,7 +51,7 @@ from PIL import Image
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load("ViT-B/32", device=device)
 
-fname = os.path.join(os.path.dirname(__file__), 'cat3.jpg')
+fname = os.path.join(os.path.dirname(__file__), 'cat3.jpg')  # Zeroshot 예제 이미지 경로 (Unseen 이미지)
 file = Image.open(fname)
 image = preprocess(file).unsqueeze(0).to(device)
 
@@ -74,7 +73,7 @@ for i in range(len(labels)):
 # 2) 키워드 중심 간략 설명
 print("2. 키워드 기반 이미지 설명")
 
-# 키워드 조합으로 descriptions 생성
+# 임의의 키워드 조합으로 descriptions 생성
 descriptions = ["cat", "dog", "kitten", "orange cat", "white cat", "gray cat", "brown cat", 
                 "cat sitting", "cat lying", "dog sitting", "cat indoors", "cat outdoors"]
 
