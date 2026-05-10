@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY") # https://platform.openai.com/settings/organization/api-keys
 
 llm = ChatOpenAI(
     model="gpt-4o", 

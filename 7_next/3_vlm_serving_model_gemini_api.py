@@ -13,7 +13,7 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 load_dotenv()
 
-os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
+os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY") # https://aistudio.google.com/app/api-keys
 
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 print("사용 가능한 모델 목록:")
