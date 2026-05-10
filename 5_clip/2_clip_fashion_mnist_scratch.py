@@ -294,23 +294,14 @@ for epoch in tbar:
 	# 학습률 스케줄러 업데이트
 	scheduler.step()
 
-
-# 손실 및 정확도 곡선 시각화
+# 손실 곡선 시각화
 import matplotlib.pyplot as plt
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
-ax1.plot(range(1, len(all_batch_losses) + 1), all_batch_losses, alpha=0.6)
-ax1.set_title("Training Loss over Batches")
-ax1.set_xlabel("Batch")
-ax1.set_ylabel("Loss")
-ax1.grid()
-
-ax2.plot(range(1, len(all_batch_accs) + 1), all_batch_accs, color='green', alpha=0.6)
-ax2.set_title("Training Accuracy over Batches")
-ax2.set_xlabel("Batch")
-ax2.set_ylabel("Accuracy (%)")
-ax2.grid()
-
-plt.tight_layout()
+plt.figure(figsize=(10, 5))
+plt.plot(all_batch_losses, label='Batch Loss')
+plt.xlabel('Batch')
+plt.ylabel('Loss')
+plt.title('CLIP Training Loss Curve')
+plt.legend()
 plt.savefig('clip_training_curves.png', dpi=150, bbox_inches='tight')
 plt.show()
 
@@ -379,7 +370,6 @@ def evaluate_accuracy(model, test_dataset, batch_size=32, k=5):
 	text_input = {k: v.to(DEVICE) for k, v in encoded_texts.items()}
 
 	with torch.no_grad():
-		# 모든 클래스에 대한 텍스트 임베딩 계산 (10개 클래스)
 		text_embeddings = F.normalize(
 			model.text_projection(model.text_encoder(text_input['input_ids'], text_input['attention_mask'])),
 			p=2, dim=-1
@@ -390,23 +380,19 @@ def evaluate_accuracy(model, test_dataset, batch_size=32, k=5):
 	topk_correct = 0
 	total_samples = 0
 
-	# 배치 단위로 이미지 처리
 	test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
 	with torch.no_grad():
 		for batch in tqdm(test_dataloader, desc="Evaluating", leave=False):
-			# 배치에서 이미지와 레이블 추출
 			images = batch['image'].to(DEVICE)
 			labels = batch['label'].to(DEVICE)
 
-			# 이미지 임베딩 계산
 			image_embeddings = F.normalize(
 				model.image_projection(model.image_encoder(images)),
 				p=2, dim=-1
 			)  # shape: (batch_size, PROJECTION_DIM)
 
 			# 이미지와 모든 텍스트 간의 유사도 계산
-			# (batch_size, PROJECTION_DIM) @ (PROJECTION_DIM, 10) -> (batch_size, 10)
 			similarities = image_embeddings @ text_embeddings.T
 
 			# Top-1 예측: 가장 높은 유사도를 가진 클래스
@@ -420,7 +406,7 @@ def evaluate_accuracy(model, test_dataset, batch_size=32, k=5):
 
 			total_samples += labels.size(0)
 
-	# 정확도 계산 (백분율)
+	# 정확도 계산
 	top1_acc = (top1_correct / total_samples) * 100
 	topk_acc = (topk_correct / total_samples) * 100
 	print(f"\nTop-1 정확도: {top1_acc:.2f}%, Top-{k} 정확도: {topk_acc:.2f}%")
