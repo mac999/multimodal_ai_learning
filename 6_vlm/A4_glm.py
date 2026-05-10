@@ -1,6 +1,6 @@
 from transformers import AutoProcessor, Glm4vForConditionalGeneration
 import torch
-MODEL_PATH = "THUDM/GLM-4.1V-9B-Thinking"
+MODEL_PATH = "THUDM/GLM-4.1V-9B-Thinking" # Zhipu AI & 칭화대학교. https://huggingface.co/zai-org/GLM-4.1V-9B-Thinking
 messages = [
     {
         "role": "user",

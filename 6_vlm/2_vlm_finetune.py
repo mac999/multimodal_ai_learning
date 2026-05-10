@@ -8,7 +8,7 @@ from transformers import AutoProcessor, BlipForConditionalGeneration
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model_id = "Salesforce/blip-image-captioning-base" # https://huggingface.co/Salesforce/blip-image-captioning-base
 learning_rate = 5e-5
-epochs = 8
+epochs = 100
 
 # VLM 모델과 프로세서 로드
 print("모델 로드 중...")
